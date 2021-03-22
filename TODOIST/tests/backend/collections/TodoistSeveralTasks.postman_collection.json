@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "4ada43ef-33f3-4a56-9f7e-09a128813e6c",
+		"name": "Todoist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PROJECT",
+			"item": [
+				{
+					"name": "Positive test: Create several tasks",
+					"item": [
+						{
+							"name": "Positive test: Create several tasks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Positive tests",
+											"var jsonData = pm.response.json();",
+											"",
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 600ms\", function () {",
+											"pm.expect(pm.response.responseTime).to.be.below(600);",
+											"});",
+											"",
+											"//Json Schema Validation",
+											"var schema = {",
+											"    \"type\": \"object\",",
+											"    \"properties\": {",
+											"        \"id\": {\"type\": \"integer\"},",
+											"        \"assigner\": {\"type\": \"integer\"},",
+											"        \"project_id\": {\"type\": \"integer\"},",
+											"        \"section_id\": {\"type\": \"integer\"},",
+											"        \"order\": {\"type\": \"integer\"},",
+											"        \"content\": {\"type\": \"string\"},",
+											"        \"completed\": {\"type\": \"boolean\"},",
+											"        \"label_ids\":{",
+											"            \"type\": \"array\",",
+											"            \"properties\":{",
+											"",
+											"        }",
+											"        },",
+											"        \"priority\": {\"type\": \"integer\"},",
+											"        \"comment_count\": {\"type\": \"integer\"},",
+											"        \"creator\": {\"type\": \"integer\"},",
+											"        \"created\": {\"type\": \"string\"},",
+											"        \"due\": {",
+											"            \"type\": \"object\",",
+											"            \"properties\": {",
+											"                \"recurring\": {\"type\": \"boolean\"},",
+											"                \"string\": {\"type\": \"string\"},",
+											"                \"date\": {\"type\": \"string\"},",
+											"                \"datetime\": {\"type\": \"string\"},",
+											"                \"timezone\": {\"type\": \"string\"}",
+											"        },",
+											"        \"required\": [\"string\",\"date\"]",
+											"        },",
+											"        \"url\": {\"type\": \"string\"}",
+											"        },",
+											"    \"required\": [\"content\"]",
+											"};",
+											"",
+											"pm.test('Response Json schema is correct', function(){ ",
+											"    pm.expect(tv4.validate(jsonData, schema, true, true)).to.be.true; ",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": \"{{content}}\", \n    \"due_string\": \"{{due_string}}\", \n    \"due_lang\": \"{{due_lang}}\", \n    \"priority\": {{priority}}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}",
+									"host": [
+										"{{baseURL}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

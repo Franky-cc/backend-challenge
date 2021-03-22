@@ -1,0 +1,16 @@
+{
+  "name": "backend-challenge",
+  "version": "1.0.0",
+  "description": "Back End Postman Automation",
+  "main": "index.js",
+  "scripts": {
+    "testAPI": "npx newman run ./TODOIST/tests/backend/collections/Todoist.postman_collection.json -e ./TODOIST/tests/backend/envVariables/QA.postman_environment.json -r htmlextra --reporter-htmlextra-export ./TODOIST/tests/backend/reports/Report.html",
+    "test-several-tasks": "npx newman run './TODOIST/tests/backend/collections/TodoistSeveralTasks.postman_collection.json' -e './TODOIST/tests/backend/envVariables/QA.postman_environment.json' --folder 'Positive test: Create several tasks' -n 3 -d './TODOIST/tests/backend/csv/file.csv' -r htmlextra --reporter-htmlextra-export ./TODOIST/tests/backend/reports/SeveralTasksReport.html"
+  },
+  "author": "Cinthia Galvez",
+  "license": "ISC",
+  "dependencies": {
+    "newman": "^5.2.2",
+    "newman-reporter-htmlextra": "^1.20.1"
+  }
+}

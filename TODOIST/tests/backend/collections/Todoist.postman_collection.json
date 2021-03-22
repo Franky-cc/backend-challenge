@@ -1,0 +1,793 @@
+{
+	"info": {
+		"_postman_id": "4ada43ef-33f3-4a56-9f7e-09a128813e6c",
+		"name": "Todoist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PROJECT",
+			"item": [
+				{
+					"name": "Positive test: Create a task",
+					"item": [
+						{
+							"name": "Positive test: Create a new task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Positive tests",
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"    pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});",
+											"",
+											"//Content  ",
+											"var jsonData = pm.response.json();",
+											"var content = pm.environment.get(\"contentTask\");",
+											"pm.test(\"Content task is correct\", function () {",
+											"    pm.expect(jsonData.content).to.eql(content);",
+											"});",
+											"",
+											"//Json Schema Validation",
+											"var schema = {",
+											"    \"type\": \"object\",",
+											"    \"properties\": {",
+											"        \"id\": {\"type\": \"integer\"},",
+											"        \"assigner\": {\"type\": \"integer\"},",
+											"        \"project_id\": {\"type\": \"integer\"},",
+											"        \"section_id\": {\"type\": \"integer\"},",
+											"        \"order\": {\"type\": \"integer\"},",
+											"        \"content\": {\"type\": \"string\"},",
+											"        \"completed\": {\"type\": \"boolean\"},",
+											"        \"label_ids\":{",
+											"            \"type\": \"array\",",
+											"            \"properties\":{",
+											"",
+											"            }",
+											"        },",
+											"        \"priority\": {\"type\": \"integer\"},",
+											"        \"comment_count\": {\"type\": \"integer\"},",
+											"        \"creator\": {\"type\": \"integer\"},",
+											"        \"created\": {\"type\": \"string\"},",
+											"        \"due\": {",
+											"            \"type\": \"object\",",
+											"            \"properties\": {",
+											"                \"recurring\": {\"type\": \"boolean\"},",
+											"                \"string\": {\"type\": \"string\"},",
+											"                \"date\": {\"type\": \"string\"},",
+											"                \"datetime\": {\"type\": \"string\"},",
+											"                \"timezone\": {\"type\": \"string\"}",
+											"            },",
+											"            \"required\": [\"string\",\"date\"]",
+											"        },",
+											"        \"url\": {\"type\": \"string\"}",
+											"    },",
+											"    \"required\": [\"content\"]",
+											"};",
+											"",
+											"pm.test('Response Json schema is correct', function(){ ",
+											"    pm.expect(tv4.validate(jsonData, schema, true, true)).to.be.true; ",
+											"});",
+											"",
+											"//Set taskId environment variable",
+											"pm.environment.set(\"taskId\", jsonData.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-Id",
+										"value": "$(uuidgen)",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": \"{{contentTask}}\", \n    \"due_string\": \"{{dueStringTask}}\", \n    \"due_lang\": \"{{dueLangTask}}\", \n    \"priority\": {{priorityTask}}\n}"
+								},
+								"url": {
+									"raw": "{{baseURL}}",
+									"host": [
+										"{{baseURL}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative test: Create a new task",
+					"item": [
+						{
+							"name": "Negative test: Create a new task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.be.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-Id",
+										"value": "$(uuidgen)",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": 1\n}"
+								},
+								"url": {
+									"raw": "{{baseURL}}",
+									"host": [
+										"{{baseURL}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Positive test: Get an active task",
+					"item": [
+						{
+							"name": "Positive test: Get an active task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Positive tests",
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"    pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});",
+											"",
+											"//Content",
+											"var jsonData = pm.response.json();",
+											"var content = pm.environment.get(\"contentTask\");",
+											"pm.test(\"Content task is correct\", function () {",
+											"    pm.expect(jsonData.content).to.eql(\"Finish my challenge\");",
+											"});",
+											"",
+											"//Json Schema Validation",
+											"var schema = {",
+											"    \"type\": \"object\",",
+											"    \"properties\": {",
+											"        \"id\": {\"type\": \"integer\"},",
+											"        \"assigner\": {\"type\": \"integer\"},",
+											"        \"project_id\": {\"type\": \"integer\"},",
+											"        \"section_id\": {\"type\": \"integer\"},",
+											"        \"order\": {\"type\": \"integer\"},",
+											"        \"content\": {\"type\": \"string\"},",
+											"        \"completed\": {\"type\": \"boolean\"},",
+											"        \"label_ids\":{",
+											"            \"type\": \"array\",",
+											"            \"properties\":{",
+											"",
+											"            }",
+											"        },",
+											"        \"priority\": {\"type\": \"integer\"},",
+											"        \"comment_count\": {\"type\": \"integer\"},",
+											"        \"creator\": {\"type\": \"integer\"},",
+											"        \"created\": {\"type\": \"string\"},",
+											"        \"due\": {",
+											"            \"type\": \"object\",",
+											"            \"properties\": {",
+											"                \"recurring\": {\"type\": \"boolean\"},",
+											"                \"string\": {\"type\": \"string\"},",
+											"                \"date\": {\"type\": \"string\"},",
+											"                \"datetime\": {\"type\": \"string\"},",
+											"                \"timezone\": {\"type\": \"string\"}",
+											"            },",
+											"            \"required\": [\"string\",\"date\"]",
+											"        },",
+											"        \"url\": {\"type\": \"string\"}",
+											"    },",
+											"    \"required\": [\"content\"]",
+											"};",
+											"",
+											"pm.test('Response Json schema is correct', function(){ ",
+											"    pm.expect(tv4.validate(jsonData, schema, true, true)).to.be.true; ",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/{{taskId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"{{taskId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative test: Get an active task",
+					"item": [
+						{
+							"name": "Negative test: Get an active task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.be.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/123",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"123"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Positive test: Get active tasks",
+					"item": [
+						{
+							"name": "Positive test: Get active tasks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"    pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});",
+											"",
+											"//Content",
+											"var jsonData = pm.response.json();",
+											"var id = parseInt(pm.environment.get(\"taskId\"));",
+											"pm.test(\"A task Id is equal to \" + id, function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData[0].id).to.eql(id);",
+											"});",
+											"",
+											"",
+											"//Json Schema Validation",
+											"var schema = {",
+											"    \"type\": \"array\",",
+											"    \"items\": [{",
+											"        \"type\": \"object\",",
+											"        \"properties\": {",
+											"            \"id\": {\"type\": \"integer\"},",
+											"            \"assigner\": {\"type\": \"integer\"},",
+											"            \"project_id\": {\"type\": \"integer\"},",
+											"            \"section_id\": {\"type\": \"integer\"},",
+											"            \"order\": {\"type\": \"integer\"},",
+											"            \"content\": {\"type\": \"string\"},",
+											"            \"completed\": {\"type\": \"boolean\"},",
+											"            \"label_ids\":{",
+											"                \"type\": \"array\",",
+											"                \"properties\":{",
+											"",
+											"                }",
+											"            },",
+											"            \"priority\": {\"type\": \"integer\"},",
+											"            \"comment_count\": {\"type\": \"integer\"},",
+											"            \"creator\": {\"type\": \"integer\"},",
+											"            \"created\": {\"type\": \"string\"},",
+											"            \"due\": {",
+											"                \"type\": \"object\",",
+											"                \"properties\": {",
+											"                    \"recurring\": {\"type\": \"boolean\"},",
+											"                    \"string\": {\"type\": \"string\"},",
+											"                    \"date\": {\"type\": \"string\"},",
+											"                    \"datetime\": {\"type\": \"string\"},",
+											"                    \"timezone\": {\"type\": \"string\"}",
+											"                }",
+											"            },",
+											"            \"url\": {\"type\": \"string\"}",
+											"        }",
+											"    }]",
+											"};",
+											"",
+											"pm.test('Response Json schema is correct', function(){ ",
+											"    pm.expect(tv4.validate(jsonData, schema, true, true)).to.be.true; ",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}",
+									"host": [
+										"{{baseURL}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative test: Get active tasks",
+					"item": [
+						{
+							"name": "Negative test: Get active tasks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Content",
+											"var jsonData = pm.response.json();",
+											"pm.test(\"A task Id is not equal to 123123\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData[0].id).to.not.eql(123123);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}",
+									"host": [
+										"{{baseURL}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Positive test: Update a task",
+					"item": [
+						{
+							"name": "Positive test: Update a task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"    pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-Id",
+										"value": "$(uuidgen)",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": \"Keep learning\"\n}"
+								},
+								"url": {
+									"raw": "{{baseURL}}/{{taskId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"{{taskId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative test: Update a task",
+					"item": [
+						{
+							"name": "Negative test: Update a task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.be.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-Id",
+										"value": "$(uuidgen)",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\": 1231231\n}"
+								},
+								"url": {
+									"raw": "{{baseURL}}/{{taskId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"{{taskId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Positive test: Change a task status",
+					"item": [
+						{
+							"name": "Positive test: Change a task status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"    pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/{{taskId}}/close",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"{{taskId}}",
+										"close"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative test: Change a task status",
+					"item": [
+						{
+							"name": "Negative test: Change a task status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.be.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/132432/closed",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"132432",
+										"closed"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Positive test: Reopen a task",
+					"item": [
+						{
+							"name": "Positive test: Reopen a task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"    pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/{{taskId}}/reopen",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"{{taskId}}",
+										"reopen"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative test: Reopen a task",
+					"item": [
+						{
+							"name": "Negative test: Reopen a task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.be.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/{{taskId}}/reopened",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"{{taskId}}",
+										"reopened"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Positive test: Delete a task",
+					"item": [
+						{
+							"name": "Positive test: Delete a task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 2xx\", function () {",
+											"    pm.response.to.be.success;",
+											"});",
+											"",
+											"//Response time validation",
+											"pm.test(\"Response time is less than 500ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/{{taskId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"{{taskId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative test: Delete a task",
+					"item": [
+						{
+							"name": "Negative test: Delete a task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Code validation",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.be.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/12312312",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"12312312"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
