@@ -38,5 +38,5 @@ Finally, to run the test that creates several tasks from a csv file, just run in
 ```
 npm run test-several-tasks 
 ```
-An html report named SeveralTasksReport.html will be created in the reports folder. To visualize the report just drag & drop the html file on chrome and enjoy!
+An html report named SeveralTasksReport.html will be created in the reports folder. To visualize the report just open the html file on chrome and enjoy!
 
