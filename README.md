@@ -14,7 +14,8 @@ Also, install the reporter:
 npm i newman-reporter-htmlextra
 ```
 
-To run all the tests, just type in the terminal:
+
+Now, you are setup to run all the tests. Run in the terminal:
 ```
 npm run testAPI
 ```
