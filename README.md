@@ -4,14 +4,14 @@ Todoist API Tests with Postman and Newman.
 
 The purpose of these tests involves the API task module of the Todoist website. The tests were done on the following scenarios:
 
-*Create a new task
-*Create several tasks
-*Get an active task
-*Get active tasks
-*Update a task
-*Change a task status to 'complete'
-*Reopen a task
-*Delete a task
+- Create a new task
+- Create several tasks
+- Get an active task
+- Get active tasks
+- Update a task
+- Change a task status to 'complete'
+- Reopen a task
+- Delete a task
 
 # Installation and execution:
 
