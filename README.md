@@ -1,4 +1,4 @@
-# backend-challenge
+# Back End Challenge
 
 Todoist API Tests with Postman and Newman.
 
@@ -13,7 +13,7 @@ The purpose of these tests involves the API task module of the Todoist website. 
 - Reopen a task
 - Delete a task
 
-# Installation and execution:
+## Installation and execution:
 
 Download the zip, unzipped the content, open your favorite IDE and open the project folder. Once inside, open a new terminal and type:
 
